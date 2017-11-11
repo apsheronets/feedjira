@@ -6,6 +6,9 @@ module Feedjira
       include SAXMachine
       include FeedEntryUtilities
 
+      element :title, as: :title_html,  with: { type: 'html' }
+      element :title, as: :title_xhtml, with: { type: 'xhtml' }
+      element :title, as: :title_text,  with: { type: 'text' }
       element :title
       element :link, as: :url, value: :href, with: { type: 'text/html', rel: 'alternate' } # rubocop:disable Metrics/LineLength
       element :name, as: :author
@@ -26,6 +29,10 @@ module Feedjira
 
       def url
         @url ||= links.first
+      end
+
+      def title
+        title_xhtml || title_html || title_text || @title
       end
     end
   end
